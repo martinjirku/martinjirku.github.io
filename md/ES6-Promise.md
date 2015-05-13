@@ -28,6 +28,7 @@ These to function should be called and when an asynchronous event was resolved, 
 
 The widely use approach used by jQuery.defered, angular.$q.defered (which is basically based on kriskowal's Q, search on github) is not compliant with ES6 specification. However angular uses the compliant version of promise as well (see [angular doc](https://docs.angularjs.org/api/ng/service/$q)).
 My proposal as a good practice is a usage the ES6 compliant within the angular code as well, and not to use jQuery.defered version.
+It is possible to send by the `resolve()` only one argument, however, we can send an array and in a `then()` method We can use `([ParameterOne, ParameterTwo, ParameterThree])=>{};` notation;
 
 # Resources
 
