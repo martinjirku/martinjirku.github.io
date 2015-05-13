@@ -17,8 +17,21 @@ New instance of Promise object will contain these methods and properties:
   - `reject(reason)` - rejects the promise
   - `resolve(value|promise|thenable)` - resolve the promise
 
+# Executor function
+
+The Promise will pass to the executor function two parameters, which are functions:
+
+  - `resolve()`
+  - `reject()`
+
+These to function should be called and when an asynchronous event was resolved, or rejected.
+
+The widely use approach used by jQuery.defered, angular.$q.defered (which is basically based on kriskowal's Q, search on github) is not compliant with ES6 specification. However angular uses the compliant version of promise as well (see [angular doc](https://docs.angularjs.org/api/ng/service/$q)).
+My proposal as a good practice is a usage the ES6 compliant within the angular code as well, and not to use jQuery.defered version.
+
 # Resources
 
   - [ECMAScript Language Specification - draft](http://people.mozilla.org/~jorendorff/es6-draft.html)
   - [Mozilla developer network - Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/prototype)
   - [html5rocks.com - promises] (http://www.html5rocks.com/en/tutorials/es6/promises/)
+  - experience
