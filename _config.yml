@@ -1,4 +1,6 @@
-name: Martin Jirku blog
-title: Martin's blog
+name: MJ's blog
+title: MJ's blog
+description: Learn by writing...
+show_downloads: true
 theme: jekyll-theme-cayman
 highlighter: rouge
