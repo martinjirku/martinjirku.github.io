@@ -37,7 +37,7 @@ I will divide my notes into few steps, I would like to follow in my investigatio
 
 I will publish this project on my github account, it's going to be called **oscaffolder**. The code for the creation looks like this:
 
-```oCaml
+```ocaml
 open BatOptParse
 
 let () =
@@ -80,7 +80,7 @@ Let's add new options to our application
 
 If you were reading documentation properly, you noticed, that after `make` is function we are interested in called `add`. Let's read its [documentation](https://ocaml-batteries-team.github.io/batteries-included/hdoc2/BatOptParse.OptParser.html#VALadd) more closely:
 
-```oCaml
+```ocaml
 val add : t ->
   ?group: group ->
   ?help: string ->
@@ -98,7 +98,7 @@ Interesting fact! you can see, that function `add` returns `unit`, which is basi
 To add new `BatOptParse.Opt` we need to create it first. So let's read closely documentation for [BatOptParse.Opt](https://ocaml-batteries-team.github.io/batteries-included/hdoc2/BatOptParse.Opt.html). Again, this module is divided into few sections, slightly different as we read in _BatOptParse.OptParser_: 1.) exceptions, 2.) Types (important!), 2.) Value retrieval, 3.) Creation, 4.) Output and error handling. One usable function could be `value_option`. With this function, you can create new BatOptParse.Opt, however good news is, that we already have all common Opt defined. We is it? You asked. BatOptParse contains more submodules, one of the is: `StdOpt`. If you remember, this module contains various standard options. Again, let's look into [documentation](https://ocaml-batteries-team.github.io/batteries-included/hdoc2/BatOptParse.StdOpt.html).
 
 We will use "Value options". For string options we can use: `str_option`. Type signature for this function is straighforward. 
-```oCaml
+```ocaml
 val str_option : ?default:string -> ?metavar:string -> unit -> string BatOptParse.Opt.t
 ```
 
@@ -106,7 +106,7 @@ All arguments are optional. so we need just call this function to create. Howeve
 
 And the code looks like this:
 
-```oCaml
+```ocaml
 open BatOptParse
 open BatOptParse.Opt
 
