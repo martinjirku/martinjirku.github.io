@@ -11,3 +11,5 @@ Additional resources are here:
  The goal is to create simple application which will be modular, and will provide structure and idea how to parse arguments with usage of optParser. I like to do something usefull even for educational purposes, so I decided, I will create very simple and naive implementation of scaffolding app, for generating basic project structure including `_oasis`, `.merlin`, `src` and it should start `oasis setup` command as well.
 
  user will need to provide options, so scaffolding app will help with generating new project.
+
+ 
