@@ -5,6 +5,6 @@ Welcome to my blog... Let's read few articles:
 # Table of contents
 
 1. Javascript
-  - [ES6 Promises](./md/ES6-Promise.html)
+  - [ES6 Promises](./md/ES6-Promise.md)
 2. OCaml
-  - [Batteries Command options parser](./ocaml/Batteries-optParser.html)
+  - [Batteries Command options parser](./ocaml/Batteries-optParser.md)
