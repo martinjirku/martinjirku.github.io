@@ -25,7 +25,7 @@
 
     <section class="main-content">
       {{ content }}
-      {{ if page.url != "/index.html" | page.url != "/"}}
+      {{ if page.url != "/index.html" and page.url != "/"}}
         <div id="disqus_thread"></div>
         <script>
 
