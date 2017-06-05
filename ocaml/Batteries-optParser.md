@@ -102,7 +102,7 @@ We will use "Value options". For string options we can use: `str_option`. Type s
 val str_option : ?default:string -> ?metavar:string -> unit -> string BatOptParse.Opt.t
 ```
 
-All arguments are optional. so we need just call this function to create. However, I would like to use both optional argumetns we will specify _default_ and _metavar_ value. We can find much more types of Opt available for you. Such as float_option, str_option, int_option. I chose this one `store_false`.
+All arguments are optional, so we need just call this function to create new Opt. However, I would like to use both optional argumetns we will specify _default_ and _metavar_ value. We can find much more types of Opt available for you. Such as float_option, str_option, int_option. I chose this one `store_false`.
 
 And the code looks like this:
 
