@@ -8,3 +8,7 @@
 ## OCaml type, module system
 
   - [Unreliable Guide to OCaml Modules](http://lambdafoo.com/blog/2015/05/15/unreliable-guide-to-ocaml-modules/) - article which explains the OCaml module system.
+
+## OCaml libraries
+
+ - [Batteries](https://github.com/ocaml-batteries-team/batteries-included/wiki) - and its [documentation](http://ocaml-batteries-team.github.io/batteries-included/hdoc2/). Great community based helper library for everything.
