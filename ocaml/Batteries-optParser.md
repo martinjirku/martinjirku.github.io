@@ -135,3 +135,93 @@ options:
 ```
 
 # Refactoring and cleaning
+
+Let's look closer on the code. We should refactor it, decouple logic for getting and parsing options from the main part of the application. First step is to create a function which will be responsible for parsing these things. I call it `get_command_options`.
+
+```ocaml
+let get_command_options () = 
+  let project_name = StdOpt.str_option ~default:("/") ~metavar:"" () in
+  let skip_merlin = StdOpt.store_false () in
+  let options = OptParser.make
+    ~prog:"Oscaffolder turbo 2000"
+    ~usage:"Oscaffolder helps you to generate new project by specifying project name"
+    ~version:"Oscaffolder v0.0.1" ()
+  in
+    OptParser.add options ~short_name:'n' ~long_name:"name" ~help:"Specify project name" project_name;
+    OptParser.add options ~short_name:'m' ~long_name:"skip-merlin" ~help:"Generate project name without Merlin" skip_merlin;
+```
+
+It was pretty straightforward task. More or less like *copy+paste* type of solution. Current implementation just initialize options and parser. Unfortunatelly, this is not sufficient! We want `get_command_options` to return settings object.
+
+Let's define structure of settings object:
+```ocaml
+type settings = {
+  project_name: string;
+  skip_merlin: bool;
+}
+```
+
+In `get_command_options` we need to add *the parsing* part:
+
+```ocaml
+BatOptParse.OptParser.parse_argv options
+```
+
+The problem is, that we're getting this warning from Merlin:
+```
+[merlin] Warning 10: this expression should have type unit.
+```
+Even this is not error, I do not like warnings, if I decide to leave code with warning, I better understand what's going on. So, what's going on here? The problem is, we do not assign the result of `BatOptParse.OptParser.parse_argv` function to enything, result is type of `string list`, so Merlin would like to have this value assign. My personal opinion, the one disadvantage of `BatOptParse` is that it's not pure functional solution and we depend on side effects done by implementation. When I dig deeper, I found the simple solution for these kind of situation. There is a function in OCaml core library with type signature: `type _ = 'a -> unit`. That's what we need! Function has self explaining name `ignore`;
+
+In OCaml, I like the power of infix operators, one of these operators is `@@` provided by *Batteries*. This is used for the function application according [documentation](https://ocaml-batteries-team.github.io/batteries-included/hdoc2/BatPervasives.html#VAL(@@)): 
+
+> Function application. `f @@ x` is equivalent to `f x`. However, it binds less tightly (between `::` and `=`,`<`,`>`, etc) and is right-associative, which makes it useful for composing sequences of function calls without too many parentheses. It is similar to Haskell's $. Note that it replaces pre-2.0 `**>` and `<|`.
+
+Let's use the power of this Function application over here, to get rid of parentheses:
+
+```ocaml
+    ignore @@ BatOptParse.OptParser.parse_argv options;
+```
+
+At the end we want to return setting object, so we need to add little code for creation of the settings, let's see my final code:
+
+```ocaml
+type settings = {
+  project_name: string;
+  skip_merlin: bool;
+}
+
+let get_command_options () = 
+  let open BatOptParse in
+  let open BatOptParse.Opt in
+  let project_name = StdOpt.str_option ~default:("/") ~metavar:"" () in
+  let skip_merlin = StdOpt.store_false () in
+  let options = OptParser.make
+    ~prog:"Oscaffolder turbo 2000"
+    ~usage:"Oscaffolder helps you to generate new project by specifying project name"
+    ~version:"Oscaffolder v0.0.1" ()
+  in
+    OptParser.add options ~short_name:'n' ~long_name:"name" ~help:"Specify project name" project_name;
+    OptParser.add options ~short_name:'m' ~long_name:"skip-merlin" ~help:"Generate project name without Merlin" skip_merlin;
+    ignore @@ BatOptParse.OptParser.parse_argv options;
+    {
+      project_name = project_name.option_get () |> (function | None -> "default_name"; | Some(x) -> x);
+      skip_merlin = skip_merlin.option_get () |> (function | None -> true; | Some(m) -> m);
+    }
+
+let () =
+  let settings = get_command_options () in print_endline settings.project_name;
+```
+
+You can noticed I moved opening of `BatOptParse` and `BatOptParse.Opt` into `get_command_options` function, so global scope won't be polluted.
+
+I've used the pattern matching to get rid of `Optional` type.
+
+```project_name.option_get () |> (function | None -> "default_name"; | Some(x) -> x)```
+
+Now we have access to settings object in main function. The result of the current code is:
+
+```
+/Users/martinjirku/dev/ocaml/oscaffolder $ ./oscaffolder.native --name test
+test
+```
